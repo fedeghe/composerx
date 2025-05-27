@@ -2,3 +2,7 @@ node_modules
 coverage
 source
 tests
+test.js
+.circleci
+.coveralls.yml
+CHANGELOG.md
