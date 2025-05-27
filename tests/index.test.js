@@ -11,29 +11,29 @@ describe('composerx', () => {
         /**
          * now we want to compose one or more rx only using the existing elements
          */
-        c.compose('rx1', 'RC(word)#RC(number)');
-        const r1 = c.match('rx1', 'abc#123').results;
+        c.compose('rx1', 'cx(word)#cx(number)');
+        const r1 = c.match('rx1', 'abc#123');
         expect(r1[1]).toBe('abc');
         expect(r1[2]).toBe('123');
         
-        c.compose('rx2', 'RC(word):RC(word)');
-        const r2 = c.match('rx2', 'abc:sss').results;
+        c.compose('rx2', 'cx(word):cx(word)');
+        const r2 = c.match('rx2', 'abc:sss');
         expect(r2[1]).toBe('abc');
         expect(r2[2]).toBe('sss');
         
-        c.compose('rx3', 'RC(number)/RC(number)');
-        const r3 = c.match('rx3', '123/456').results;
+        c.compose('rx3', 'cx(number)/cx(number)');
+        const r3 = c.match('rx3', '123/456');
         expect(r3[1]).toBe('123');
         expect(r3[2]).toBe('456');
         
-        c.compose('rxOR', 'RC(number)|RC(word)', {group:true});
-        const rOR1 = c.match('rxOR', '123').results;
+        c.compose('rxOR', 'cx(number)|cx(word)', {autogroup:true});
+        const rOR1 = c.match('rxOR', '123');
         expect(rOR1[1]).toBe('123');
 
-        const rOR2_1 = c.match('rxOR', 'aaas').results;
+        const rOR2_1 = c.match('rxOR', 'aaas');
         expect(rOR2_1[1]).toBe('aaas');
 
-        const rOR2_2 = c.match('rxOR', 'aaas1212').results;
+        const rOR2_2 = c.match('rxOR', 'aaas1212');
         expect(rOR2_2).toBe(null);
 
     });
@@ -43,14 +43,14 @@ describe('composerx', () => {
             // add two simple elements
             c.add('1-31', /(\d|[1-2]\d|3[01])/);
             c.add('1-7', /([1-7]+)/);
-            c.compose('dow', 'RC(1-31)/RC(1-7)');
+            c.compose('dow', 'cx(1-31)/cx(1-7)');
         });
         describe('positive cases', () => {
             test.each([
                 [ '2/7', ['2', '7'] ],
                 [ '31/7', ['31', '7'] ]
             ])('%s', (input, expected) => {
-                const r = c.match('dow', input).results;
+                const r = c.match('dow', input);
                 expect(r).toBeTruthy();
                 expect(r.length).toBe(3);
                 expect(r[1]).toBe(expected[0]);
@@ -62,7 +62,7 @@ describe('composerx', () => {
                 ['32/7'],
                 ['31/8'],
             ])('%s', input => {
-                const r = c.match('dow', input).results;
+                const r = c.match('dow', input);
                 expect(r).toBe(null);
                 
             });
@@ -71,11 +71,51 @@ describe('composerx', () => {
 
 
     describe('other static methods', () => {
-        it('should check element name', () => {
-            expect(() => c.add('', /test/)).toThrow('Element must be a non-empty string');
-            expect(() => c.add(123, /test/)).toThrow('Element must be a non-empty string');
+        beforeEach(() => c.clear());
+        
+        it('should get an element', () => {
+            c.add('test', /test/);
+            c.add('anotherTest', /anotherTest/);
+            c.compose('composedTest', 'cx(test)|cx(anotherTest)');
+            expect(c.get('test')).toEqual(/test/);
+            expect(c.get('anotherTest')).toEqual(/anotherTest/);
+            expect(c.get('composedTest')).toEqual(/^test|anotherTest$/);
         });
 
+        it('should attempt gracefully the deletion of a non exisinting element', () => {
+            c.add('test', /test/);
+            expect(() => c.remove('nonExistent')).not.toThrow();
+            expect(c.get('test')).toEqual(/test/);
+        });
+
+        it('should override an element', () => {
+            c.add('test', /test/);
+            expect(c.get('test')).toEqual(/test/);
+            c.add('test', /newTest/);
+            expect(c.get('test')).toEqual(/newTest/);
+        });
+
+        it('should return undefined when matching a non existent element', () => {
+            expect(c.match('test', 'whatever')).toBeUndefined();
+        });
+
+        it('should clear all elements', () => {
+            c.clear();
+            expect(Object.keys(c.els).length).toBe(0);
+        });
+
+        it('compose should override when composing an already existing element', () => {
+            c.add('test1', /test1/);
+            c.add('test2', /test2/);
+            c.compose('test', 'cx(test1)|cx(test2)');
+            expect(c.get('test')).toEqual(/^test1|test2$/);
+            c.compose('test', 'cx(test2)|cx(test1)');
+            expect(c.get('test')).toEqual(/^test2|test1$/);
+        });
+    });
+
+    describe('errors', () => {
+        beforeEach(() => c.clear());
         it('should check element regex', () => {
             expect(() => c.add('test', 'not-a-regexp')).toThrow('expected valid rx');
         });
@@ -83,54 +123,32 @@ describe('composerx', () => {
         it('should remove an element', () => {
             c.add('test', /test/);
             c.remove('test');
-            expect(() => c.match('test', 'some string')).toThrow('element not found');
+            expect(c.get('test')).toBeUndefined();
         });
-        it('should throw an error when attempting to remove an element which does not exist', () => {
-            expect(() => c.remove('nonexistent')).toThrow('element not found');
-        });
-
-
-        it('should clear all elements', () => {
-            c.clearAll();
-            expect(Object.keys(c.els).length).toBe(0);
-            expect(c.results).toBe(null);
-        });
-
-        it('compose should throw and error when trying to create an already existing element', () => {
-            c.add('test', /test/);
-            expect(() => c.compose('test', 'RC(test)')).toThrow('Element already exists');
-        });
-    });
-
-    describe('errors', () => {
         it('should throw error on invalid element name', () => {
-            expect(() => c.add('', /test/)).toThrow('Element must be a non-empty string');
-            expect(() => c.add(123, /test/)).toThrow('Element must be a non-empty string');
+            expect(() => c.add('', /test/)).toThrow('element must be a non-empty string');
+            expect(() => c.add(123, /test/)).toThrow('element must be a non-empty string');
         });
 
         it('should throw error on invalid element regex', () => {
             expect(() => c.add('test', 'not-a-regexp')).toThrow('expected valid rx');
         });
 
-        it('should throw error on duplicate element name', () => {
-            c.clearAll();
-            c.add('test', /test/);
-            expect(() => c.add('test', /another-test/)).toThrow('Element already exists');
+        
+        it('should throw an error when attempting to remove an element not passing a valid string', () => {
+            expect(() => c.remove()).toThrow('element must be a non-empty string');
         });
-
-        it('should remove an element', () => {
-            c.remove('test');
-            expect(() => c.match('test', 'some string')).toThrow('element not found');
-        });
+        
 
         it('should throw ', () => {
             expect(() => c.match()).toThrow('name must be a non-empty string');
         });
-
-        it('should clear all elements', () => {
-            c.clearAll();
-            expect(Object.keys(c.els).length).toBe(0);
+        it('should throw with no string search', () => {
+            c.add('test', /test/);
+            expect(() => c.match('test', 1)).toThrow('a string is needed');
         });
+
+        
         it('should throw an error when the template name is an empty string or is not passed', () => {
             const err = 'Template must be a non-empty string';
             expect(() => c.compose('a', '')).toThrow(err);

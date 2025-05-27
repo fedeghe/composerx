@@ -1,56 +1,53 @@
-class RXC {
+class CRX {
     static els = {};
-    static results = null;
     static th(v){
         throw new Error(v);
     }
     static checkName(name, what) {
         if (typeof name !== 'string' || !name.trim()) {
-            RXC.th(`${what} must be a non-empty string`);
+            CRX.th(`${what} must be a non-empty string`);
         }
+    }
+    static checkStr(name) {
+        if (typeof name !== 'string') {
+            CRX.th(`a string is needed`);
+        }
+    }
+    static get(name) {
+        CRX.checkName(name, 'element');
+        return CRX.els[name];
     }
     static add(name, rx) {
-        RXC.checkName(name, 'Element');
+        CRX.checkName(name, 'element');
         if (! (rx instanceof RegExp )) {
-            RXC.th('expected valid rx');
+            CRX.th('expected valid rx');
         }
-        if (name in RXC.els) {
-            RXC.th('Element already exists');
-        }
-        RXC.els[name] = rx;
-        return RXC;
+        CRX.els[name] = rx;
+        return CRX;
     }
     static remove(name) {
-        RXC.checkName(name, 'Element');
-        if (!(name in RXC.els)) {
-            RXC.th('element not found');
-        }
-        delete RXC.els[name];
-        return RXC;
+        CRX.checkName(name, 'element');
+        delete CRX.els[name];
+        return CRX;
     }
-    static clearAll() {
-        RXC.els = {};
-        RXC.results = null;
-        return RXC;
+    static clear() {
+        CRX.els = {};
+        return CRX;
     }
     static match(name = '', str = '') {
-        RXC.checkName(name, 'name');
-        RXC.checkName(str, 'str');
-        if (!(name in RXC.els)) {
-            RXC.th('element not found');
+        CRX.checkName(name, 'name');
+        CRX.checkStr(str);
+        if (!(name in CRX.els)) {
+            return undefined;
         }
-        RXC.results = str.match(RXC.els[name]);
-        return RXC;
+        return str.match(CRX.els[name]);
     }
-    static compose(name, tpl = '', {group = false} = {}) {
-        RXC.checkName(name, 'Compose');
-        RXC.checkName(tpl, 'Template');
-        if (name in RXC.els) {
-            RXC.th('Element already exists');
-        }
-        const resultStart = `^${group? '(': ''}${tpl}${group? ')': ''}$`,
-            result = Object.entries(RXC.els).reduce((acc, [name, rx]) => {
-                const ph = `RC(${name})`;
+    static compose(name, tpl = '', {autogroup = false} = {}) {
+        CRX.checkName(name, 'Compose');
+        CRX.checkName(tpl, 'Template');
+        const resultStart = `^${autogroup? '(': ''}${tpl}${autogroup? ')': ''}$`,
+            result = Object.entries(CRX.els).reduce((acc, [name, rx]) => {
+                const ph = `cx(${name})`;
                 let newAcc = `${acc}`;
                 while (newAcc.includes(ph)) {
                     newAcc = newAcc.replace(ph, rx.source);
@@ -58,9 +55,9 @@ class RXC {
                 return newAcc;
             }, resultStart);
 
-        RXC.els[name] = new RegExp(result);
-        return RXC;
+        CRX.els[name] = new RegExp(result);
+        return CRX;
     }
 }
 
-module.exports =  RXC;
+module.exports =  CRX;

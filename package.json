@@ -1,7 +1,7 @@
 {
   "name": "composerx",
   "version": "0.0.1",
-  "main": "dist/main/index.js",
+  "main": "dist/min/index.js",
   "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^9.27.0",
