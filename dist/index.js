@@ -1,5 +1,5 @@
 /*
-composerx (v.0.0.3)
+composerx (v.0.0.4)
 ~1.76KB
 */
 class CRX {

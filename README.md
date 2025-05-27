@@ -5,7 +5,7 @@
 
 
 # composerx  
-version: `0.0.3`   
+version: `0.0.4`   
 [CHANGELOG](https://github.com/fedeghe/composerx/blob/master/CHANGELOG.md)  
 
 Never write the same regexp again, ...ok, ...almost!
@@ -13,7 +13,7 @@ Never write the same regexp again, ...ok, ...almost!
 _composerx_ aims to help to define only once a specific _RegExp_ and then reuse it (in ~1KB):
 
 ```js
-const crx = require('./dist/index.js');
+const crx = require('composerx');
 
 const monthDateRx = /^(([1-9])|([1-2]\d)|(3[01]))$/,
     threeLetters = /^([a-z]{3})$/i;
