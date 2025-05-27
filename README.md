@@ -4,7 +4,9 @@
 ![track](https://click.jmvc.org/p/pBXq70mW/1)
 
 
-# composerx
+# composerx  
+version: `0.0.1`   
+[CHANGELOG](https://github.com/fedeghe/composerx/blob/master/CHANGELOG.md)  
 
 Never write the same regexp again, ...ok, ...almost!
 
