@@ -1,0 +1,11 @@
+coverage
+node_modules
+.buildNum.json
+check.js
+main.bmpr
+manual.js
+gen1.js
+gen2.js
+.coveralls.yml
+source/TODO.md
+ignore
