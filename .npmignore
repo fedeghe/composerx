@@ -6,3 +6,4 @@ test.js
 .circleci
 .coveralls.yml
 CHANGELOG.md
+eslint.config.js
