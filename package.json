@@ -1,7 +1,24 @@
 {
   "name": "composerx",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "dist/min/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://fedeghe@github.com/fedeghe/composerx.git"
+  },
+  "keywords": [
+    "compose regexp",
+    "compose regex",
+    "regexp composer",
+    "regex composer",
+    "regexp",
+    "regex",
+    "regular expressions",
+    "regular expression",
+    "regular expressions composer",
+    "regular expression composer"
+  ],
+  "author": "Federico Ghedina <fedeghe@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^9.27.0",
