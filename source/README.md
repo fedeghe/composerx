@@ -70,11 +70,13 @@ Removes an existing _element_
 **returns**: 🔗  
 
 ---
-### `composerx.match(String name, String search)`  
+### `composerx.match(String name, String search, {definedOnly = false})`  
 Run a match of the _search_ against the elements named _name_  
 - **throws**  
     when `name` is not a string or is empty string.  
     when `search` is not string.  
+
+- `options.definedOnly`: when passed as `true` all `undefined` will be filtered out from the resulting array
 
 **returns**:
 the rx match output or `undefined` when the element does not exists

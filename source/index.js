@@ -34,13 +34,14 @@ class CRX {
         CRX.els = {};
         return CRX;
     }
-    static match(name = '', str = '') {
+    static match(name = '', str = '', {definedOnly = false} = {}) {
         CRX.checkName(name, 'name');
         CRX.checkStr(str);
         if (!(name in CRX.els)) {
             return undefined;
         }
-        return str.match(CRX.els[name]);
+        const res = str.match(CRX.els[name]);
+        return definedOnly && res ? res.filter(e => typeof e !== 'undefined') : res;
     }
     static compose(name, tpl = '', {autogroup = false} = {}) {
         CRX.checkName(name, 'Compose');

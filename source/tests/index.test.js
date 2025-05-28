@@ -69,7 +69,6 @@ describe('composerx', () => {
         });
     });
 
-
     describe('other static methods', () => {
         beforeEach(() => c.clear());
         
