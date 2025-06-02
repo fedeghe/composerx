@@ -74,3 +74,25 @@ describe('wild tests', () => {
    
     
 });
+
+// describe('extreme cases', () => {
+//     describe('quite more complex single entry doubled', () => {
+//         beforeEach(() => {
+//             c.clear();
+//             // add some extreme cases
+//             c.add('extreme', /([a-zA-Z0-9!@#$%^&*()_+={}\[\]:;"'<>,.?\/\\|-]+)/);
+//             c.compose('extremeGroup', 'cx(extreme) cx(extreme)', {autogroup: true});
+//         });
+
+//         test.each([
+//             ['extreme', 'abc123!@#', ['abc123!@#', 'abc123!@#']],
+//             ['extreme', '!!!', ['!!!', '!!!']],
+//             ['extremeGroup', 'abc123!@# def456$%^', ['abc123!@# def456$%^', 'abc123!@#', 'def456$%^']],
+//             ['extremeGroup', '!!! !!!', ['!!! !!!', '!!!', '!!!']]
+//         ])('%s', (rxName, input, expected) => {
+//             const result = c.match(rxName, input);
+//             expect(result).toBeTruthy();
+//             expect([...result]).toMatchObject(expected);
+//         });
+//     });
+// });

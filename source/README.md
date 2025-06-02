@@ -10,7 +10,7 @@ version: `maltaV('PACKAGE.version')`
 
 Never write the same regexp again, ...ok, ...almost!
 
-_composerx_ aims to help to define only once a specific _RegExp_ and then reuse it (in ~1KB):
+In 1KB _composerx_ aims to help to define only once a specific _RegExp_ and then reuse it to compose other _RegExp_:
 
 ```js
 const crx = require('composerx');
