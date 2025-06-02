@@ -5,12 +5,12 @@
 
 
 # composerx  
-version: `0.0.8`   
+version: `0.0.9`   
 [CHANGELOG](https://github.com/fedeghe/composerx/blob/master/CHANGELOG.md)  
 
 Never write the same regexp again, ...ok, ...almost!
 
-_composerx_ aims to help to define only once a specific _RegExp_ and then reuse it (in ~1KB):
+In 1KB _composerx_ aims to help to define only once a specific _RegExp_ and then reuse it to compose other _RegExp_:
 
 ```js
 const crx = require('composerx');

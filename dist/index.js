@@ -1,5 +1,5 @@
 /*
-composerx (v.0.0.8)
+composerx (v.0.0.9)
 ~1.66KB
 */
 const $ = {
