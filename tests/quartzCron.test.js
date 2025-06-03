@@ -16,19 +16,19 @@ describe('quartzcron like', () => {
             ].forEach(([name, rx]) => c.add(name, rx));
             
             // compose some
-            c.compose('md/md', 'cx(md)/cx(md)');
-            c.compose('md-md', 'cx(md)-cx(md)');
-            c.compose('md-md/md', 'cx(md)-cx(md)/cx(md)');
-            c.compose('mdW', 'cx(md)W');
-            c.compose('L-md', 'L-cx(md)');
+            c.compose('md/md', '^cx(md)/cx(md)$');
+            c.compose('md-md', '^cx(md)-cx(md)$');
+            c.compose('md-md/md', '^cx(md)-cx(md)/cx(md)$');
+            c.compose('mdW', '^cx(md)W$');
+            c.compose('L-md', '^L-cx(md)$');
 
-            c.compose('mdORmd/md', 'cx(md)|cx(md)/cx(md)', {autogroup: true});
-            c.compose('wdOR*/wd', 'cx(wd)|(\\*/cx(wd))');
-            c.compose('wdORwd/wd', 'cx(wd)|(cx(wd)/cx(wd))');
-            c.compose('wd-wd', 'cx(wd)-cx(wd)');
-            c.compose('wd-wd/wd', 'cx(wd)-cx(wd)/cx(wd)');
-            c.compose('wd#wdn', 'cx(wd)#cx(w#)');
-            c.compose('wdL', 'cx(wd)L');
+            c.compose('mdORmd/md', '^(cx(md)|cx(md)/cx(md))$');
+            c.compose('wdOR*/wd', '^cx(wd)|(\\*/cx(wd))$');
+            c.compose('wdORwd/wd', '^cx(wd)|(cx(wd)/cx(wd))$');
+            c.compose('wd-wd', '^cx(wd)-cx(wd)$');
+            c.compose('wd-wd/wd', '^cx(wd)-cx(wd)/cx(wd)$');
+            c.compose('wd#wdn', '^cx(wd)#cx(w#)$');
+            c.compose('wdL', '^cx(wd)L$');
         });
 // ␀
         test.each([
@@ -89,20 +89,20 @@ describe('quartzcron like', () => {
     
         
     });
+    
     describe('full 7 fields', () => {
         beforeEach(() => {
             c.clear();
             // add some common rx elements
             c.add('*', /(\*)/);
             c.add('0-59', /([0-5]?\d)/);
-            c.compose('*0-59', 'cx(*)|cx(0-59)', {autogroup: true});
-            c.compose('0-59-with-cadence', 'cx(0-59)/cx(0-59)', {autogroup: true});
-            c.compose('0-59-range', 'cx(0-59)-cx(0-59)', {autogroup: true});
-            c.compose('0-59-range-with-cadence', 'cx(0-59)-cx(0-59)/cx(0-59)', {autogroup: true});
+            c.compose('*0-59', '^(cx(*)|cx(0-59))$');
+            c.compose('0-59-with-cadence', '^(cx(0-59)/cx(0-59))$');
+            c.compose('0-59-range', '^(cx(0-59)-cx(0-59))$');
+            c.compose('0-59-range-with-cadence', '^(cx(0-59)-cx(0-59)/cx(0-59))$');
             c.compose(
                 '0-59-full',
-                'cx(*)|cx(*0-59)|cx(0-59)|cx(0-59-with-cadence)|cx(0-59-range)|cx(0-59-range-with-cadence)',
-                {autogroup: true}
+                '^(cx(*)|cx(*0-59)|cx(0-59)|cx(0-59-with-cadence)|cx(0-59-range)|cx(0-59-range-with-cadence))$'
             );
         });
         
@@ -152,4 +152,5 @@ describe('quartzcron like', () => {
         });
         
     });
+    
 });

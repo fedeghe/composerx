@@ -21,10 +21,10 @@ describe('wild tests', () => {
             ['ipaddress', /((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)(\.(?!$)|$)){4}/]
         ].forEach(([name, rx]) => c.add(name, rx));
         //compose some now even using | and & 
-        c.compose('wordOrNumber', 'cx(word)|cx(number)', {autogroup: true});
-        c.compose('dateAndTime', 'cx(date) cx(time)', {autogroup: true});
-        c.compose('emailOrUrl', 'cx(email)|cx(url)', {autogroup: true});
-        c.compose('phoneOrEmail', 'cx(phone)|cx(email)', {autogroup: true});
+        c.compose('wordOrNumber', '^(cx(word)|cx(number))$');
+        c.compose('dateAndTime', '(cx(date) cx(time))');
+        c.compose('emailOrUrl', '(cx(email)|cx(url))');
+        c.compose('phoneOrEmail', '(cx(phone)|cx(email))');
         
     });
 
@@ -74,25 +74,3 @@ describe('wild tests', () => {
    
     
 });
-
-// describe('extreme cases', () => {
-//     describe('quite more complex single entry doubled', () => {
-//         beforeEach(() => {
-//             c.clear();
-//             // add some extreme cases
-//             c.add('extreme', /([a-zA-Z0-9!@#$%^&*()_+={}\[\]:;"'<>,.?\/\\|-]+)/);
-//             c.compose('extremeGroup', 'cx(extreme) cx(extreme)', {autogroup: true});
-//         });
-
-//         test.each([
-//             ['extreme', 'abc123!@#', ['abc123!@#', 'abc123!@#']],
-//             ['extreme', '!!!', ['!!!', '!!!']],
-//             ['extremeGroup', 'abc123!@# def456$%^', ['abc123!@# def456$%^', 'abc123!@#', 'def456$%^']],
-//             ['extremeGroup', '!!! !!!', ['!!! !!!', '!!!', '!!!']]
-//         ])('%s', (rxName, input, expected) => {
-//             const result = c.match(rxName, input);
-//             expect(result).toBeTruthy();
-//             expect([...result]).toMatchObject(expected);
-//         });
-//     });
-// });

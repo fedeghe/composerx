@@ -10,29 +10,37 @@ version: `maltaV('PACKAGE.version')`
 
 Never write the same regexp again, ...ok, ...almost!
 
-In 1KB _composerx_ aims to help to define only once a specific _RegExp_ and then reuse it to compose other _RegExp_:
+In less than 1KB _composerx_ aims to help to:  
+1. define a specific _RegExp_ (once)
+2. reuse defined ones to define another _RegExp_
+3. go back to 1 or 2
 
 ```js
 const crx = require('composerx');
 
-const monthDateRx = /^(([1-9])|([1-2]\d)|(3[01]))$/,
-    threeLetters = /^([a-z]{3})$/i;
-
-crx.add('1-31', monthDateRx);
-crx.add('3letters', threeLetters);
+crx.add('1-31', /^(([1-9])|([1-2]\d)|(3[01]))$/);
+crx.add('3letters',  /^([a-z]{3})$/i);
 crx.compose(
     'myComposedRx',
     'cx(1-31)|cx(3letters)',
-    {autogroup: true} // optionally groups all composing rxs
 );
 
 
 const res1 = crx.match('myComposedRx', '3'),
     res2 = crx.match('myComposedRx', 'abf');
 
+console.log(crx.get('myComposedRx').source)
+
+
 console.log({
-    res1, // ['3', '3', '3', '3', undefined, ...]
-    res2  // [ 'abf', 'abf', undefined, ...]
+    res1,
+    // ['3', '3', '3', '3', undefined, ...]
+    
+    res2 
+    // ['abf', undefined, undefined, undefined, undefined, 'abf', ....]
+    
+    myComposedRx: crx.get('myComposedRx').source
+    // (^(([1-9])|([1-2]\d)|(3[01]))$|^([a-z]{3})$)
 });
 ```
 # API
