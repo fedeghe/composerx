@@ -3,7 +3,7 @@ const c  = require('../dist/index.js');
 
 describe('quartzcron like', () => {
     describe('dom', () => {
-        beforeEach(() => {
+        beforeAll(() => {
             c.clear();
             // add some common rx elements
             [
@@ -21,7 +21,6 @@ describe('quartzcron like', () => {
             c.compose('md-md/md', '^cx(md)-cx(md)/cx(md)$');
             c.compose('mdW', '^cx(md)W$');
             c.compose('L-md', '^L-cx(md)$');
-
             c.compose('mdORmd/md', '^(cx(md)|cx(md)/cx(md))$');
             c.compose('wdOR*/wd', '^cx(wd)|(\\*/cx(wd))$');
             c.compose('wdORwd/wd', '^cx(wd)|(cx(wd)/cx(wd))$');
@@ -32,51 +31,47 @@ describe('quartzcron like', () => {
         });
 // ␀
         test.each([
-            ['md/md', '',           '12/28', ['12/28', '12', '28', undefined]],
-            ['md-md', '',           '12-28', ['12-28', '12', '28', undefined]],
-            ['md-md', '∅',         '12-58', null],
-            ['md-md/md', 'plain',   '12-28/3', ['12-28/3', '12', '28', '3', undefined]],
-            ['md-md/md', '∅',      '32-28/3', null],
-            ['mdW', 'plain',        '12W', ['12W', '12']],
-            ['mdW', '∅',           '42W', null],
-            ['L-md', 'plain',       'L-23', ['L-23', '23']],
-            ['L-md', '∅',          'L23', null],
+            ['md/md', '12/28', ['12/28', '12', '28', undefined]],
+            ['md-md', '12-28', ['12-28', '12', '28', undefined]],
+            ['md-md', '12-58', null],
+            ['md-md/md', '12-28/3', ['12-28/3', '12', '28', '3', undefined]],
+            ['md-md/md', '32-28/3', null],
+            ['mdW', '12W', ['12W', '12']],
+            ['mdW', '42W', null],
+            ['L-md', 'L-23', ['L-23', '23']],
+            ['L-md', 'L23', null],
             
-            ['mdORmd/md', 'first',      '23', ['23', '23', '23']],
-            ['mdORmd/md', 'OR branch',  '23/24', ['23/24', '23/24', undefined, '23','24']],
-            ['mdORmd/md', '∅',         '43/24', null],
+            ['mdORmd/md', '23', ['23', '23', '23']],
+            ['mdORmd/md', '23/24', ['23/24', '23/24', undefined, '23','24']],
+            ['mdORmd/md', '43/24', null],
 
-            ['wdOR*/wd', 'first',       '3', ['3', '3', undefined, undefined]],
-            ['wdOR*/wd', 'OR branch',   '*/3', ['*/3', undefined, '*/3', '3']],
-            ['wdOR*/wd', '∅',          '*6/3', null],
-            ['wdOR*/wd', '1st ∅',          '8', null],
-            ['wdOR*/wd', '2nd ∅',          '*/9', null],
+            ['wdOR*/wd', '3', ['3', '3', undefined, undefined]],
+            ['wdOR*/wd', '*/3', ['*/3', undefined, '*/3', '3']],
+            ['wdOR*/wd', '*6/3', null],
+            ['wdOR*/wd', '8', null],
+            ['wdOR*/wd', '*/9', null],
             
-            ['wd-wd', 'plain',       '3-5', ['3-5', '3', '5', undefined]],
-            ['wd-wd', '1st ∅',       '8-5', null],
-            ['wd-wd', '2nd ∅',       '5-8', null],
+            ['wd-wd', '3-5', ['3-5', '3', '5', undefined]],
+            ['wd-wd', '8-5', null],
+            ['wd-wd', '5-8', null],
             
-            ['wd-wd/wd', 'plain',       '3-5/2', ['3-5/2', '3', '5', '2']],
-            ['wd-wd/wd', '1st ∅',       '32-5/2', null],
-            ['wd-wd/wd', '2nd ∅',       '2-45/2', null],
-            ['wd-wd/wd', '3rd ∅',       '2-5/82', null],
+            ['wd-wd/wd', '3-5/2', ['3-5/2', '3', '5', '2']],
+            ['wd-wd/wd', '32-5/2', null],
+            ['wd-wd/wd', '2-45/2', null],
+            ['wd-wd/wd', '2-5/82', null],
             
-            ['wd#wdn', 'plain',       '3#2', ['3#2', '3', '2']],
-            ['wd#wdn', 'plain 2',       '7#1', ['7#1', '7', '1']],
-            ['wd#wdn', 'plain 3',       '7#5', ['7#5', '7', '5']],
-            ['wd#wdn', '1st ∅',       '8#2', null],
-            ['wd#wdn', '2nd ∅',       '2#6', null],
-            ['wd#wdn', '3rd ∅',       '7#6', null],
+            ['wd#wdn', '3#2', ['3#2', '3', '2']],
+            ['wd#wdn', '7#1', ['7#1', '7', '1']],
+            ['wd#wdn', '7#5', ['7#5', '7', '5']],
+            ['wd#wdn', '8#2', null],
+            ['wd#wdn', '2#6', null],
+            ['wd#wdn', '7#6', null],
 
-            ['wdL', 'plain 3',       '3L', ['3L', '3']],
-            ['wdL', 'plain 1',       '1L', ['1L', '1']],
-            ['wdL', '0 ∅',       '0L', null],
-            
-        // eslint-disable-next-line no-unused-vars
-        ])('%s %s', (rxName, _, input, expected) => {
+            ['wdL', '3L', ['3L', '3']],
+            ['wdL', '1L', ['1L', '1']],
+            ['wdL', '0L', null],
+        ])('%s %s', (rxName, input, expected) => {
             const result = c.match(rxName, input);
-            // console.log(c.get(rxName));
-            // console.log(result);
             if (expected === null) {
                 expect(result).toBeNull();
                 return;
@@ -85,13 +80,10 @@ describe('quartzcron like', () => {
                 expect([...result]).toMatchObject(expected);
             }
         });
-
-    
-        
     });
     
     describe('full 7 fields', () => {
-        beforeEach(() => {
+        beforeAll(() => {
             c.clear();
             // add some common rx elements
             c.add('*', /(\*)/);
@@ -138,10 +130,8 @@ describe('quartzcron like', () => {
                     "5-15/3", "5", "15", "3"
                 ]
             ],
-        // eslint-disable-next-line no-unused-vars
         ])('%s %s', (rxName, input, expected) => {
             const result = c.match(rxName, input);
-            
             if (expected === null) {
                 expect(result).toBeNull();
                 return;

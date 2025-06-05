@@ -1,6 +1,6 @@
 /*
-composerx (v.0.0.10)
-~1.54KB
+composerx (v.0.0.11)
+~1.49KB
 */
 const $ = {
     els: {},
@@ -9,27 +9,22 @@ const $ = {
     /* checkName */
     _cn: (n /* name */) => 
         (typeof n !== 'string' || !n.trim()) 
-        && $._th('non-empty string expected'),
+        ? $._th('non-empty string expected') : n,
 
     /* checkString */
     _cs: n /* name */ => 
         typeof n !== 'string'
-        && $._th(`a string is needed`),
-    get: n /* name*/ => {
-        $._cn(n);
-        return $.els[n];
-    },
-    add: (n /* name */, rx) => {
-        $._cn(n);
+        ? $._th(`a string is needed`) : n,
+    get: n /* name*/ => $.els[$._cn(n)],
+    add: (n /* name */, rx) => {;
         if (! (rx instanceof RegExp )) {
             $._th('expected valid rx');
         }
-        $.els[n] = rx;
+        $.els[$._cn(n)] = rx;
         return $;
     },
     remove: n =>  {
-        $._cn(n);
-        delete $.els[n];
+        delete $.els[$._cn(n)];
         return $;
     },
     clear: () => {

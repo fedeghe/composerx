@@ -1,5 +1,5 @@
 /*
-composerx (v.0.0.10)
-~898B
+composerx (v.0.0.11)
+~886B
 */
-const $={els:{}, _th:v=>{throw new Error(v);}, _cn:(n)=>(typeof n !=='string' || !n.trim())&& $._th('non-empty string expected'), _cs:n=> typeof n !=='string' && $._th(`a string is needed`), get:n=>{$._cn(n);return $.els[n];}, add:(n , rx)=>{$._cn(n);if(!(rx instanceof RegExp)){$._th('expected valid rx');}$.els[n]=rx;return $;}, remove:n=>{$._cn(n);delete $.els[n];return $;}, clear:()=>{$.els={};return $;}, match:(n='', s='',{definedOnly:dx=false}={})=>{$._cn(n);$._cs(s);if(!(n in $.els))return undefined;const r=s.match($.els[n]);return dx && r ? r.filter(e=> typeof e !=='undefined'):r;}, compose:(n, t='')=>{$._cn(n);$._cn(t);const rin=t, r=rin;$.els[n]=new RegExp(Object.entries($.els).reduce((acc,[nm, rx])=>{const ph=`cx(${nm})`;let nAcc=`${acc}`;while(nAcc.includes(ph))nAcc=nAcc.replace(ph, rx.source);return nAcc;},r));return $;}};module.exports=$;
+const $={els:{}, _th:v=>{throw new Error(v);}, _cn:(n)=>(typeof n !=='string' || !n.trim())? $._th('non-empty string expected'):n, _cs:n=> typeof n !=='string' ? $._th(`a string is needed`):n, get:n=> $.els[$._cn(n)], add:(n , rx)=>{;if(!(rx instanceof RegExp)){$._th('expected valid rx');}$.els[$._cn(n)]=rx;return $;}, remove:n=>{delete $.els[$._cn(n)];return $;}, clear:()=>{$.els={};return $;}, match:(n='', s='',{definedOnly:dx=false}={})=>{$._cn(n);$._cs(s);if(!(n in $.els))return undefined;const r=s.match($.els[n]);return dx && r ? r.filter(e=> typeof e !=='undefined'):r;}, compose:(n, t='')=>{$._cn(n);$._cn(t);const rin=t, r=rin;$.els[n]=new RegExp(Object.entries($.els).reduce((acc,[nm, rx])=>{const ph=`cx(${nm})`;let nAcc=`${acc}`;while(nAcc.includes(ph))nAcc=nAcc.replace(ph, rx.source);return nAcc;},r));return $;}};module.exports=$;

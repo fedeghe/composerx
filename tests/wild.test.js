@@ -39,7 +39,7 @@ describe('wild tests', () => {
         ['emailOrUrl', 'not-an-email-or-url', null],
         ['phoneOrEmail', '+1234567890', ['+1234567890', '+1234567890','+123', undefined,'4567890', undefined]],
         ['phoneOrEmail', 'fedeghe@gmail.com', ['fedeghe@gmail.com','fedeghe@gmail.com',undefined, undefined, undefined, 'fedeghe@gmail.com']]
-    ])('%s', (rxName, input, expected) => {
+    ])('%s %s', (rxName, input, expected) => {
         const result = c.match(rxName, input);
         if (expected === null) {
             expect(result).toBeNull();
@@ -61,7 +61,7 @@ describe('wild tests', () => {
         ['emailOrUrl', 'not-an-email-or-url', null],
         ['phoneOrEmail', '+1234567890', ['+1234567890', '+1234567890','+123','4567890']],
         ['phoneOrEmail', 'fedeghe@gmail.com', ['fedeghe@gmail.com','fedeghe@gmail.com', 'fedeghe@gmail.com']]
-    ])('%s', (rxName, input, expected) => {
+    ])('%s %s', (rxName, input, expected) => {
         const result = c.match(rxName, input, {definedOnly: true});
         if (expected === null) {
             expect(result).toBeNull();
@@ -71,6 +71,4 @@ describe('wild tests', () => {
         // expect(result.length).toBe(expected.length + 1); // +1 for the full match
         expect([...result]).toMatchObject(expected);
     });
-   
-    
 });

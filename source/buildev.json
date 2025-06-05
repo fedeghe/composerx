@@ -4,8 +4,8 @@
         "mkdir -p dist/min tests dist"
     ],
     "source/*.js" : [
-        "dist -plugins=malta-jest[argz:'--rootDir=tests']...malta-header-comment[name:\"source/header.txt\",nostrict:true] -options=verbose:2,placeholderMode:'func'",
-        "dist/min -plugins=malta-millijs...malta-header-comment[name:\"source/header.txt\",nostrict:true] -options=verbose:2,placeholderMode:'func'"
+        "dist -plugins=malta-jest[argz:'--rootDir=tests']...malta-header-comment[name:\"source/header.txt\",nostrict:true] -options=placeholderMode:'func'",
+        "dist/min -plugins=malta-millijs...malta-header-comment[name:\"source/header.txt\",nostrict:true] -options=placeholderMode:'func'"
     ],
     "source/tests/*.js" : "tests -plugins=malta-jest[argz:'--rootDir=tests']",
     "source/README.md": ". -options=placeholderMode:'func'",
