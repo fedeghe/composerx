@@ -40,6 +40,33 @@ describe('composerx', () => {
             expect(rOR2_2).toBe(null);
         });
     });
+    describe('test', () => {
+        beforeEach(() => {
+            c.clear();
+            // add two simple elements
+            c.add('word', /([a-z]{3})/i);
+            c.add('number', /(\d{3})/);
+        });
+        it('#1', () => {
+            c.compose('rx1', '^cx(word)#cx(number)$');
+            expect(c.test('rx1', 'abc#123')).toBeTruthy();
+            expect(c.test('rx1', 'abc#1234')).toBeFalsy();
+        });
+        it('#2', () => {
+            c.compose('rx2', '^cx(word):cx(word)$');
+            expect(c.test('rx2', 'abc:sss')).toBeTruthy();
+            expect(c.test('rx2', 'abc:')).toBeFalsy();
+        });
+        it('#3', () => {
+            c.compose('rx3', '^cx(number)/cx(number)$');
+            expect(c.test('rx3', '123/456')).toBeTruthy();
+            expect(c.test('rx3', '123/4567')).toBeFalsy();
+        });
+        it('#4', () => {
+            expect(c.test('asdas', 'dontExists')).toBeUndefined();
+        });
+    });
+
     describe('autoanchor', () => {
         beforeEach(() => {
             c.clear();
@@ -180,6 +207,11 @@ describe('composerx', () => {
             expect(() => c.compose('b')).toThrow(err);
             expect(() => c.compose('b', true)).toThrow(err);
             expect(() => c.compose('c', /^$/)).toThrow(err);
+        });
+
+        it('test ', () => {
+            expect(() => c.test('', '')).toThrow('non-empty string expected');
+            expect(() => c.test()).toThrow('non-empty string expected');
         });
     });
 });

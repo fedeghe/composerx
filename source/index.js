@@ -34,6 +34,12 @@ const $ = {
         const r = s.match($.els[n]);
         return dx && r ? r.filter(e => typeof e !== 'undefined') : r;
     },
+    test: (n = '', s = '') => {
+        $._cn(n);
+        $._cs(s);
+        if (!(n in $.els)) return undefined;
+        return $.els[n].test(s);
+    },
     /* name, template */
     compose: (n, t = '') =>  {
         $._cn(n);

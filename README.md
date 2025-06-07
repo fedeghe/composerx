@@ -6,7 +6,7 @@
 
 
 # composerx  
-version: `0.0.11`   
+version: `0.0.12`   
 [CHANGELOG](https://github.com/fedeghe/composerx/blob/master/CHANGELOG.md)  
 
 Never write the same regexp again, ...ok, ...almost!
@@ -79,6 +79,17 @@ Removes an existing _element_
 **returns**: 🔗  
 
 ---
+### `composerx.compose(String name, String tpl)`  
+Creates a new the elements named _name_  (or overrides an existing one) using the template passed to create the new RegExp using previously added elements.  
+To use an existing element add for it a placeholder inside the `tpl` parameter (see the example above).  
+The placeholder for element named `myRx1` is `cx(myRx1)`.  
+
+- **throws**  
+    when `name` or `tpl` is not a string or is empty string.  
+
+**returns**: 🔗  
+
+---
 ### `composerx.match(String name, String search, {definedOnly = false})`  
 Run a match of the _search_ against the elements named _name_  
 - **throws**  
@@ -91,16 +102,13 @@ Run a match of the _search_ against the elements named _name_
 the rx match output or `undefined` when the element does not exists
 
 ---
-### `composerx.compose(String name, String tpl, Object options)`  
-Creates a new the elements named _name_  (or overrides an existing one) using the template passed to create the new RegExp using previously added elements.  
-To use an existing element add for it a placeholder inside the `tpl` parameter (see the example above).  
-The placeholder for element named `myRx1` is `cx(myRx1)`.  
-
+### `composerx.test(String name, String search, {definedOnly = false})`  
+Run a test of the _search_ against the elements named _name_  
 - **throws**  
-    when `name` or `tpl` is not a string or is empty string.  
+    when `name` is not a string or is empty string.  
+    when `search` is not string.  
 
-**returns**: 🔗  
-
+**returns**: Boolean
 
 ---
 ### `composerx.clear()`  

@@ -1,6 +1,6 @@
 /*
-composerx (v.0.0.11)
-~1.49KB
+composerx (v.0.0.12)
+~1.64KB
 */
 const $ = {
     els: {},
@@ -37,6 +37,12 @@ const $ = {
         if (!(n in $.els)) return undefined;
         const r = s.match($.els[n]);
         return dx && r ? r.filter(e => typeof e !== 'undefined') : r;
+    },
+    test: (n = '', s = '') => {
+        $._cn(n);
+        $._cs(s);
+        if (!(n in $.els)) return undefined;
+        return $.els[n].test(s);
     },
     /* name, template */
     compose: (n, t = '') =>  {
