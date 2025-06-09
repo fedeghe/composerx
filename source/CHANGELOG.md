@@ -1,6 +1,6 @@
 # CHANGELOG
 
-### 0.0.13  
+### 0.0.14  
 rx like .test method added
 
 ### 0.0.11  
