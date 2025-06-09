@@ -6,7 +6,7 @@
 
 
 # composerx  
-version: `0.0.12`   
+version: `0.0.13`   
 [CHANGELOG](https://github.com/fedeghe/composerx/blob/master/CHANGELOG.md)  
 
 Never write the same regexp again, ...ok, ...almost!

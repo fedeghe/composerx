@@ -3,6 +3,7 @@ coverage
 source
 tests
 test.js
+test.html
 .circleci
 .coveralls.yml
 CHANGELOG.md
