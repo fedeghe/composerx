@@ -1,5 +1,8 @@
 # CHANGELOG
 
+### 0.0.16  
+from coveralls to codecov
+
 ### 0.0.14  
 rx like .test method added
 
