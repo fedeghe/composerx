@@ -20,55 +20,58 @@ describe('wild tests', () => {
             ['currency', /(\$|€|£)?\d+(\.\d{2})?/],
             ['ipaddress', /((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)(\.(?!$)|$)){4}/]
         ].forEach(([name, rx]) => c.add(name, rx));
-        //compose some now even using | and & 
-        c.compose('wordOrNumber', '^(cx(word)|cx(number))$');
-        c.compose('dateAndTime', '(cx(date) cx(time))');
-        c.compose('emailOrUrl', '(cx(email)|cx(url))');
-        c.compose('phoneOrEmail', '(cx(phone)|cx(email))');
-        
+        //compose some
+        [
+            ['wordOrNumber', '^(cx(word)|cx(number))$'],
+            ['dateAndTime', '(cx(date) cx(time))'],
+            ['emailOrUrl', '(cx(email)|cx(url))'],
+            ['phoneOrEmail', '(cx(phone)|cx(email))']
+        ].forEach(([name, rx]) => c.compose(name, rx));        
     });
 
-    test.each([
-        ['wordOrNumber', 'abc', ['abc','abc','abc',undefined]],
-        ['wordOrNumber', '123', ['123', '123',undefined, '123']],
-        ['wordOrNumber', 'abc123', null],
-        ['dateAndTime', '2023-10-01 12:30', ['2023-10-01 12:30','2023-10-01 12:30','2023-10-01','12:30', '12', '30']],
-        ['dateAndTime', '2023-10-01 25:61', null],
-        ['emailOrUrl', 'fedeghe@gmail.com', ['fedeghe@gmail.com', 'fedeghe@gmail.com','fedeghe@gmail.com', undefined]],
-        ['emailOrUrl', 'https://example.com', ['https://example.com', 'https://example.com', undefined, 'https://example.com']],
-        ['emailOrUrl', 'not-an-email-or-url', null],
-        ['phoneOrEmail', '+1234567890', ['+1234567890', '+1234567890','+123', undefined,'4567890', undefined]],
-        ['phoneOrEmail', 'fedeghe@gmail.com', ['fedeghe@gmail.com','fedeghe@gmail.com',undefined, undefined, undefined, 'fedeghe@gmail.com']]
-    ])('%s %s', (rxName, input, expected) => {
-        const result = c.match(rxName, input);
-        if (expected === null) {
-            expect(result).toBeNull();
-            return;
-        }
-        expect(result).toBeTruthy();
-        // expect(result.length).toBe(expected.length + 1); // +1 for the full match
-        expect([...result]).toMatchObject(expected);
+    describe('full match', () => {
+        test.each([
+            ['wordOrNumber', 'abc', ['abc','abc','abc',undefined]],
+            ['wordOrNumber', '123', ['123', '123',undefined, '123']],
+            ['dateAndTime', '2023-10-01 12:30', ['2023-10-01 12:30','2023-10-01 12:30','2023-10-01','12:30', '12', '30']],
+            ['emailOrUrl', 'fedeghe@gmail.com', ['fedeghe@gmail.com', 'fedeghe@gmail.com','fedeghe@gmail.com', undefined]],
+            ['emailOrUrl', 'https://example.com', ['https://example.com', 'https://example.com', undefined, 'https://example.com']],
+            ['phoneOrEmail', '+1234567890', ['+1234567890', '+1234567890','+123', undefined,'4567890', undefined]],
+            ['phoneOrEmail', 'fedeghe@gmail.com', ['fedeghe@gmail.com','fedeghe@gmail.com',undefined, undefined, undefined, 'fedeghe@gmail.com']]
+        ])('%s %s', (rxName, input, expected) => {
+            const result = c.match(rxName, input);
+            if (expected === null) {
+                expect(result).toBeNull();
+                return;
+            }
+            expect(result).toBeTruthy();
+            // expect(result.length).toBe(expected.length + 1); // +1 for the full match
+            expect([...result]).toMatchObject(expected);
+        });
     });
-
-    test.each([
-        ['wordOrNumber', 'abc', ['abc','abc','abc']],
-        ['wordOrNumber', '123', ['123', '123', '123']],
-        ['wordOrNumber', 'abc123', null],
-        ['dateAndTime', '2023-10-01 12:30', ['2023-10-01 12:30','2023-10-01 12:30','2023-10-01','12:30', '12', '30']],
-        ['dateAndTime', '2023-10-01 25:61', null],
-        ['emailOrUrl', 'fedeghe@gmail.com', ['fedeghe@gmail.com', 'fedeghe@gmail.com','fedeghe@gmail.com']],
-        ['emailOrUrl', 'https://example.com', ['https://example.com', 'https://example.com', 'https://example.com']],
-        ['emailOrUrl', 'not-an-email-or-url', null],
-        ['phoneOrEmail', '+1234567890', ['+1234567890', '+1234567890','+123','4567890']],
-        ['phoneOrEmail', 'fedeghe@gmail.com', ['fedeghe@gmail.com','fedeghe@gmail.com', 'fedeghe@gmail.com']]
-    ])('%s %s', (rxName, input, expected) => {
-        const result = c.match(rxName, input, {definedOnly: true});
-        if (expected === null) {
+    describe('nothing', () => {
+        test.each([
+            ['dateAndTime', '2023-10-01 25:61'],
+            ['emailOrUrl', 'not-an-email-or-url'],
+            ['wordOrNumber', 'abc123'],
+        ])('%s %s', (rxName, input) => {
+            const result = c.match(rxName, input);    
             expect(result).toBeNull();
-            return;
-        }
-        expect(result).toBeTruthy();
-        // expect(result.length).toBe(expected.length + 1); // +1 for the full match
-        expect([...result]).toMatchObject(expected);
+        });
+    });
+    describe('defined only', () => {
+        test.each([
+            ['wordOrNumber', 'abc', ['abc','abc','abc']],
+            ['wordOrNumber', '123', ['123', '123', '123']],
+            ['dateAndTime', '2023-10-01 12:30', ['2023-10-01 12:30','2023-10-01 12:30','2023-10-01','12:30', '12', '30']],
+            ['emailOrUrl', 'fedeghe@gmail.com', ['fedeghe@gmail.com', 'fedeghe@gmail.com','fedeghe@gmail.com']],
+            ['emailOrUrl', 'https://example.com', ['https://example.com', 'https://example.com', 'https://example.com']],
+            ['phoneOrEmail', '+1234567890', ['+1234567890', '+1234567890','+123','4567890']],
+            ['phoneOrEmail', 'fedeghe@gmail.com', ['fedeghe@gmail.com','fedeghe@gmail.com', 'fedeghe@gmail.com']],
+        ])('%s %s', (rxName, input, expected) => {
+            const result = c.match(rxName, input, {definedOnly: true});
+            expect(result).toBeTruthy();
+            expect([...result]).toMatchObject(expected);
+        });
     });
 });

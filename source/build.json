@@ -1,11 +1,10 @@
 {
     "EXE": [
         "rm -rf dist tests",
-        "mkdir -p dist/min tests dist"
+        "mkdir -p dist tests dist"
     ],
     "#source/*.js" : [
-        "dist -plugins=malta-header-comment[name:\"source/header.txt\",nostrict:true] -options=verbose:2,placeholderMode:'func'",
-        "dist/min -plugins=malta-millijs...malta-header-comment[name:\"source/header.txt\",nostrict:true] -options=verbose:2,placeholderMode:'func'"
+        "dist -plugins=malta-millijs...malta-header-comment[name:\"source/header.txt\",nostrict:true] -options=verbose:2,placeholderMode:'func'"
     ],
     "#source/tests/*.js" : "tests",
     "#source/README.md": ". -options=placeholderMode:'func'",

@@ -1,7 +1,7 @@
 {
   "name": "composerx",
-  "version": "0.0.14",
-  "main": "dist/min/index.js",
+  "version": "0.0.15",
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "https://fedeghe@github.com/fedeghe/composerx.git"
@@ -22,8 +22,8 @@
   "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^9.27.0",
-    "coveralls": "^3.1.1",
     "eslint": "^9.27.0",
+    "jest": "^30.2.0",
     "malta": "^4.1.42",
     "malta-header-comment": "^1.0.12",
     "malta-jest": "^0.0.2",
@@ -35,7 +35,6 @@
     "test": "jest  --verbose --rootDir=tests",
     "watch": "jest --watch --rootDir=tests",
     "cover": "jest --collectCoverage --rootDir=tests",
-    "coveralls": "jest --collectCoverage --rootDir=$PWD/tests && cat ./tests/coverage/lcov.info | coveralls",
     "lint": "eslint source"
   }
 }
