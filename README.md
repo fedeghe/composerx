@@ -6,7 +6,7 @@
 ![track](https://click.jmvc.org/p/pBXq70mW/1)
 
 
-# composerx 0.0.16  
+# composerx 0.0.17  
 
 Never write the same regexp again, ...ok, ...almost!
 
